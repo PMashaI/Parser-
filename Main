@@ -1,0 +1,119 @@
+package parser;
+
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.StringTokenizer;
+
+public class ParsingExcel {
+
+	public static void main(String[] args) {
+		String fileName = "J:\\parsingMM2003-7.csv";
+		ArrayList<Integer> margins = new ArrayList<Integer>();
+		BufferedReader br;
+		String line, tokenn = null;
+		int i;
+		try {
+			br = new BufferedReader(new FileReader(fileName));
+			try {
+				while ((line = br.readLine()) != null) {
+					StringTokenizer st = new StringTokenizer(line, ",\"");
+					i = 0;
+					while (st.hasMoreTokens()) {
+						tokenn = st.nextToken();
+						if (margins.size() <= i) {
+							margins.add((Integer) tokenn.length());
+						} else {
+							margins.set(
+									i,
+									Math.max(margins.get(i),
+											(Integer) tokenn.length()));
+						}
+						i++;
+					}
+				}
+				double[][] results = new double[1296][5];
+
+				br = new BufferedReader(new FileReader(fileName));
+				int l = 0;
+				String[] tokens = new String[5];
+				String[] items = new String[5];
+				String a;
+				FileWriter fw = new FileWriter("J:\\MM2003-2007proga2.csv");
+			    PrintWriter pw = new PrintWriter(fw);
+
+				while (l != 1295) {
+					while ((line = br.readLine()) != null) {
+						i = 0;
+
+						tokens = line.split(";");
+
+						a = line.replaceAll("\\s", "");
+						;
+						a.replaceAll("\\s", "");
+						items = a.split(";");
+
+						for (int h = 0; h < 5; h++) {
+							results[l][h] = Double.parseDouble(items[h]);
+						}
+						l += 1;
+					}
+
+					if (l == 1296) {
+						double array[] = new double[5];
+						int q = 0;
+						int counter = 0;
+						int s=0;
+						
+						while (q != 1295) {
+							
+							if (counter == 0) {
+								while(counter!=12){
+									if(s<1452){
+								for (int j = 0; j < results[s].length; j++) {
+									array[j] = results[s][j];
+							        //Write to file for the first row
+							        pw.print(array[j]+";");
+								}
+								for (int j = 0; j < 5; j++) {
+									System.out.print(array[j] + " ");
+								}
+								counter++;
+								s++;
+									}
+									else{}
+								}
+								System.out.println();
+								pw.println();
+								counter=0;
+								
+							}
+							else{}							
+							q++;
+						}	
+					
+					}
+					System.exit(0);
+				}
+				System.out.println("finish! ");
+		        pw.flush();
+
+		        pw.close();
+
+		        fw.close();        
+			
+			}
+
+			catch (IOException e) {
+				e.printStackTrace();
+			}
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+
+		}
+	}
+}
